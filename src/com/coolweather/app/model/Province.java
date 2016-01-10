@@ -5,12 +5,11 @@ public class Province {
 	private int id;
 	private String provinceName;
 	private String provinceCode;
-	public Province(int id, String provinceName, String provinceCode) {
+	
+	public Province() {
 		super();
-		this.id = id;
-		this.provinceName = provinceName;
-		this.provinceCode = provinceCode;
 	}
+	
 	public int getId() {
 		return id;
 	}

@@ -19,18 +19,20 @@ public class CoolWeatherDB {
 	private static SQLiteDatabase db;
 	
 	private CoolWeatherDB(Context context){
-		CoolWeatherOpenHelper dbHelper = new CoolWeatherOpenHelper(context, "DB_NAME", null, version);
+		CoolWeatherOpenHelper dbHelper = new CoolWeatherOpenHelper(context, DB_NAME, null, version);
 		db = dbHelper.getWritableDatabase();
+		System.out.println("ccc");
 		
 		
 	}
 	public synchronized static CoolWeatherDB getInstance(Context context){
 		if(coolWeatherDB == null){
+			System.out.println("bbbb");
 			coolWeatherDB = new CoolWeatherDB(context);
-			return coolWeatherDB;
-		}else{
-			return coolWeatherDB;
+			
+			
 		}
+		return coolWeatherDB;
 	}
 	public void saveProvince(Province province){
 		if(province != null){
@@ -41,15 +43,19 @@ public class CoolWeatherDB {
 		}
 	}
 	public List<Province> loadProvince(){
+		System.out.println("aaa");
 		List<Province> provinceList = new ArrayList<Province>();
 		Cursor cursor = db.query("Province", null, null, null, null, null, null);
 		if(cursor.moveToFirst()){
 			do{
+				Province province = new Province();
 				int id = cursor.getInt(cursor.getColumnIndex("id"));
 				String provinceName = cursor.getString(cursor.getColumnIndex("province_name"));
 				String provinceCode = cursor.getString(cursor.getColumnIndex("province_code"));
+				province.setId(id);
+				province.setProvinceCode(provinceCode);
+				province.setProvinceName(provinceName);
 				
-				Province province = new Province(id, provinceName, provinceCode);
 				provinceList.add(province);
 			}while(cursor.moveToNext());
 			
@@ -66,7 +72,7 @@ public class CoolWeatherDB {
 		}
 		
 	}
-	public List<City> loadCity(){
+	public List<City> loadCity(int provinceId){
 		List<City> cityList = new ArrayList<City>();
 		Cursor cursor = db.query("City", null, null, null, null, null, null);
 		if(cursor.moveToFirst()){
@@ -88,7 +94,7 @@ public class CoolWeatherDB {
 		contentValues.put("city_id", county.getCityId());
 		db.insert("County", null, contentValues);
 	}
-	public List<County> loadCounty(){
+	public List<County> loadCounty(int cityId){
 		List<County> countyList = new ArrayList<County>();
 		Cursor cursor = db.query("County", null, null, null, null, null, null);
 		if(cursor.moveToFirst()){
